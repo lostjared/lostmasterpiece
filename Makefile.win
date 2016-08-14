@@ -1,0 +1,12 @@
+CC=i586-mingw32msvc-g++
+SDLPATH=/usr/local/i586-mingw32/bin
+
+
+all: main.o
+	${CC} main.o lostmasterpiece.res -o lostmasterpiece.exe -lmxf   `${SDLPATH}/sdl-config --libs` 
+
+main.o:
+	${CC} main.cpp -c `${SDLPATH}/sdl-config --cflags`
+
+clean:
+	rm -f *.o *~

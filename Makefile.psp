@@ -1,0 +1,27 @@
+
+TARGET = mpsp
+OBJS =   main.o
+
+CFLAGS = -O3 -G0 -Wall
+CXXFLAGS = $(CFLAGS) -fno-exceptions -fno-rtti
+ASFLAGS = $(CFLAGS)
+
+PSPBIN = $(PSPSDK)/../bin
+CFLAGS += `$(PSPBIN)/sdl-config --cflags`
+LIBS +=  -lmxf `$(PSPBIN)/sdl-config --libs` -lpsppower
+
+
+EXTRA_TARGETS = EBOOT.PBP
+PSP_EBOOT_TITLE = LostMasterPiece
+PSP_EBOOT_ICON = lsd.png
+PSP_EBOOT_PIC1 = mpsp.png
+
+PSPSDK=$(shell psp-config --pspsdk-path)
+include $(PSPSDK)/lib/build.mak
+	
+
+
+psp:
+	echo "" > compile_mode.h
+	rm -f *.o masterpiece
+

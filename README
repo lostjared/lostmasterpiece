@@ -1,0 +1,28 @@
+
+This is a old project I wrote many years ago 
+the code is not very good but at least it works
+was a learning experience, this used to be published on PlanetSourceCode
+
+This project contains 3 make files.
+
+for *nix enviorments, win32, and PSP
+
+Makefile for *nix
+Makefile.win for windows ( using mingw32 on debian so change the variables in the make file if your actually using windows )
+Makefile.psp for PSP 
+
+a example to compile:
+
+make -f Makefile
+make -f Makefile.win
+make -f Makefile.psp
+
+make sure to clean the directory before building for a different platform.
+
+This project also is a older project, so the code is fairly sloppy
+it was just 'glued' together and forced to work, but performs fairly 
+well in certian circumstances. I believe the PSP version cannot quit.
+So certian bugs need to be addressed for PSP before it is ready to have 
+a stable build.
+
+This project dependeds on SDL 1.2
