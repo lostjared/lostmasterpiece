@@ -622,14 +622,7 @@ void unload()
 	game.free();
 }
 
-
-
-#ifndef _PC_MODE_H_
-extern "C" int SDL_main(int argc, char **argv);
-int SDL_main(int argc, char *argv[])
-#else
 int main(int argc, char **argv)
-#endif
 {
 #ifdef FOR_PSP
 	scePowerSetClockFrequency(333, 333, 166); //# overclocked
