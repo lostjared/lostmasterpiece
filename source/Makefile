@@ -1,11 +1,19 @@
-SDLPATH=/usr/local/bin
+OBJ=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
+CFLAGS= -std=c++98 `sdl-config --cflags`
+LDFLAGS= `sdl-config --libs` -lSDL_ttf
+PROGRAM=lostmasterpiece
 
-all: main.o mxfont.o pixelbuffer.o
-	${CXX} main.o mxfont.o pixelbuffer.o  -o lostmasterpiece  `sdl-config --libs`
+%.o: %.cpp
+	$(CXX) $(CFLAGS) $< -c -o $@
 
-main.o: main.cpp
-	${CXX} main.cpp mxfont.cpp pixelbuffer.cpp  -c `sdl-config --cflags`
+$(PROGRAM): $(OBJ)
+	$(CXX) -o $(PROGRAM)  $(OBJ) $(LDFLAGS)
 
+all: $(PROGRAM)
+
+.PHONY: clean clear
 clean:
-	rm -f *.o *~ lostmasterpiece
+	rm -f $(PROGRAM)  *.o
+
+
