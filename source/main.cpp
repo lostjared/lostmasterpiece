@@ -200,7 +200,7 @@ public:
 	{
 		paint.drawRect(35,82,621-35,440-70,0x0);
 		int start_y = 120;
-		char dat[255];
+		char dat[1024];
 		font.printText(45,90, "High Scores");
 		for(int p = 0; p < 8; p++)
 		{
