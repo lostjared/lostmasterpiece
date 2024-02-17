@@ -3,29 +3,30 @@
 ![ScreenShot](https://github.com/lostjared/lostmasterpiece/blob/master/lostmasterpiece.png?raw=true "screenshot")
 
 
-This is a modified version of MasterPiece that contains graphical elements to give the game play a boost
+This project presents an enhanced iteration of MasterPiece, incorporating visual elements to enrich the gameplay experience.
 
+Gameplay Instructions: To play, align three blocks of the same color either horizontally, vertically, or diagonally to eliminate them from the grid. Utilize the arrow keys for block movement, and press the 'A' and 'S' keys to interchange the colors of the blocks. Aim to clear as many blocks as possible before the grid reaches its capacity.
 
-How to play line up three blocks of the same color in a horizontal, vertical, or diagonal line to clear them. Press the arrow keys to move the blocks, press A and S keys
-to swap the colors. Clear as many blocks as you can before the grid fills.
+Originally developed years ago, this project reflects my early coding endeavors. While the code quality may not be exemplary, the game is functional and served as a valuable learning project. Previously, it was available on PlanetSourceCode.
 
-This is a old project I wrote many years ago 
-the code is not very good but at least it works
-was a learning experience, this used to be published on PlanetSourceCode
+Included in this project are three makefiles tailored for different environments:
 
-This project contains 3 make files.
+* For *nix systems
+* For Windows 32-bit
+* For PlayStation Portable (PSP)
+* Compilation examples:
 
-for *nix enviorments, win32, and PSP
+For *nix: 
+  
+    make -f Makefile
+    
+For Windows: 
 
-Makefile for *nix
-Makefile.psp for PSP 
+    make -f Makefile.win
 
-a example to compile:
+For PSP: 
 
-make -f Makefile
-make -f Makefile.win
-make -f Makefile.psp
-
-make sure to clean the directory before building for a different platform.
-
-This project dependeds on SDL 1.2
+    make -f Makefile.psp
+    
+Please ensure to clean the directory prior to building for a different platform.
+Dependencies: This project requires SDL 1.2.
