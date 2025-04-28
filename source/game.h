@@ -647,15 +647,17 @@ public:
 		
 		static int wait = 0;
 		
-		if((++wait % 4) == 0) {
+		if((++wait % 2) == 0) {
 		
 		
 			if(keybuffer[SDL_SCANCODE_LEFT]) bdown(276);
 			if(keybuffer[SDL_SCANCODE_RIGHT]) bdown(275);
 			if(keybuffer[SDL_SCANCODE_DOWN]) bdown(274);
-			if(keybuffer[SDL_SCANCODE_Q]) bdown('a');
-			if(keybuffer[SDL_SCANCODE_S]) bdown('s');
-		
+		}
+		static int wait2 = 0;
+		if((++wait2 % 3) == 0) {
+			if(keybuffer[SDL_SCANCODE_Q]) bdown('a'); 
+			if(keybuffer[SDL_SCANCODE_S]) bdown('s');		
 		}
 
 	}
