@@ -101,7 +101,7 @@ public:
 
 	void update()
 	{
-		paint.drawRect(35,82,621-35,440-70, 0x0);
+		paint.drawRect(35,82,621-35,440-70, SDL_MapRGBA(mxhwnd.pscr->format, 0, 0, 0, 255));
 		char chr[255];
 		snprintf(chr,254, "Amount of Lines Until Speed increase: %d", lines);
 		font.printText(70,90,chr);
@@ -131,7 +131,7 @@ public:
 	}
 	void update()
 	{
-		paint.drawRect(35,82,621-35,440-70,0x0);
+		paint.drawRect(35,82,621-35,440-70,SDL_MapRGBA(mxhwnd.pscr->format, 0, 0, 0, 255));
 		font.printText(40,100,"Lost Master Piece ");
 		font.printText(40,120,"This program is free. ");
 		font.printText(40,140,"Click or Press Escape to Return");
@@ -200,7 +200,7 @@ public:
 
 	void update()
 	{
-		paint.drawRect(35,82,621-35,440-70,0x0);
+		paint.drawRect(35,82,621-35,440-70,SDL_MapRGBA(mxhwnd.pscr->format, 0, 0, 0, 255));
 		int start_y = 120;
 		char dat[1024];
 		font.printText(45,90, "High Scores");
@@ -440,22 +440,22 @@ void keydown(int key)
 	switch(mxhwnd.getScreen())
 	{
 	case INTRO:
-		if(key == 13)
+		if(key == SDLK_RETURN)
 			mxhwnd.setScreen(START);
 		break;
 	case START:
 		{
 			switch(key)
 			{
-			case 273:
+			case SDLK_UP:
 				if(pstart.cursor_pos > 0)
 					pstart.cursor_pos--;
 				break;
-			case 274:
+			case SDLK_DOWN:
 				if(pstart.cursor_pos < 3)
 					pstart.cursor_pos++;
 				break;
-			case 13:
+			case SDLK_RETURN:
 				switch(pstart.cursor_pos)
 				{
 				case 0:
@@ -478,24 +478,24 @@ void keydown(int key)
 		}
 		break;
 	case CREDITS:
-		if(key == 27)
+		if(key == SDLK_ESCAPE)
 			mxhwnd.setScreen(START);
 		break;
 	case OPTIONS:
 		switch(key)
 		{
-		case 27:
+		case SDLK_ESCAPE:
 			mxhwnd.setScreen(START);
 			break;
-		case 273:
+		case SDLK_UP:
 			if(pstart.options.cur_pos > 0)
 				pstart.options.cur_pos--;
 			break;
-		case 274:
+		case SDLK_DOWN:
 			if(pstart.options.cur_pos < 1)
 				pstart.options.cur_pos++;
 			break;
-		case 275:
+        case SDLK_RIGHT:
 			switch(pstart.options.cur_pos)
 			{
 			case 0:
@@ -510,7 +510,7 @@ void keydown(int key)
 				break;
 			}
 			break;
-		case 276:
+		case SDLK_LEFT:
 			switch(pstart.options.cur_pos)
 			{
 			case 0:
@@ -521,7 +521,7 @@ void keydown(int key)
 				break;
 			}
 			break;
-		case 13:
+		case SDLK_RETURN:
 			linenum = pstart.options.lines;
 			unload();
 			//if(mxhwnd.isFullScreen() != pstart.options.full_scr)
@@ -531,7 +531,7 @@ void keydown(int key)
 		}
 		break;
 	case GAME:
-		if(key == 27)
+		if(key == SDLK_ESCAPE)
 			mxhwnd.setScreen(START);
 		else if(key == 'p' || key == 'P')
 			game.paused = !game.paused;
@@ -596,8 +596,7 @@ void render(int screen)
 		}
 		break;
 	}
-	SDL_Flip(mxhwnd.pscr);
-
+	mxhwnd.flip();
 }
 
 void load(int scr)
@@ -649,9 +648,8 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	
-	SDL_WM_SetIcon(SDL_LoadBMP("lsd.bmp"), 0);
 
-	if(mxhwnd.init("LostMasterPiece", 640,480,32, false) != -1)
+	if(mxhwnd.init("LostMasterPiece", 1440,1080,32, false) != -1)
 	{
 		stick = SDL_JoystickOpen(0);
 		srand((int)time(0));
@@ -660,6 +658,7 @@ int main(int argc, char **argv)
 		mxhwnd.initLoop(render);
 	}
 	SDL_JoystickClose(stick);
+	SDL_Quit();
 	return (EXIT_SUCCESS);
 }
 

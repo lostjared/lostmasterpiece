@@ -7,13 +7,10 @@
 #include"SDL.h"
 #include"SDL_timer.h"
 #include<assert.h>
-#include"compile_mode.h"
+#ifdef __EMSCRIPTEN__
+#include<emscripten/emscripten.h>
+#endif
 #include"SDL_mxf.h"
-
-
-
-
-
 // wrapper class
 class mxHwnd {
     
@@ -29,31 +26,17 @@ class mxHwnd {
     
 public:
     
+    SDL_Window *window;
+    
     ~mxHwnd() {
-        
-        //SDL_FreeSurface(pscr);
+        SDL_FreeSurface(pscr);
         SDL_Quit();
     }
-    SDL_Surface *pscr;
     
+    SDL_Surface *pscr;
     
     int setfullscreen(int fullscreen,const char *title, int width, int height, int bpp)
     {
-        SDL_FreeSurface(pscr);
-        if(fullscreen == 0)
-            pscr = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE|SDL_ANYFORMAT|SDL_FULLSCREEN);
-        else
-            pscr = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE|SDL_ANYFORMAT);
-        
-        if(!pscr)
-        {
-            fprintf(stderr, "Couldn't create a surface: %s\n",SDL_GetError());
-            return -1;
-        }
-        SDL_WM_SetCaption(title, NULL);
-        printf("Successfully initalized\n");
-        scr = 0;
-        is_fullscreen = fullscreen;
         return 0;
     }
     
@@ -64,22 +47,20 @@ public:
     
     int init(const char *title, int width, int height, int bpp, bool fullscreen)
     {
-        
-        atexit(SDL_Quit);
-  
-        if(fullscreen == true)
-            pscr = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE|SDL_ANYFORMAT|SDL_FULLSCREEN);
+        if(is_fullscreen)
+            window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
         else
-            pscr = SDL_SetVideoMode(width, height, bpp, SDL_SWSURFACE|SDL_ANYFORMAT);
+            window = SDL_CreateWindow("MasterPiece", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
         
-        if(!pscr)
-        {
-            fprintf(stderr, "Couldn't create a surface: %s\n",SDL_GetError());
-            return -1;
-        }
-        SDL_WM_SetCaption(title, NULL);
-        printf("Successfully initalized\n");
+        
+        SDL_Surface *temp = SDL_GetWindowSurface(window);
+        SDL_Surface* new_surface = SDL_CreateRGBSurfaceWithFormat(0,640,480,temp->format->BitsPerPixel,temp->format->format);
+        pscr = new_surface;
         scr = 0;
+        
+        SDL_Surface *ico = SDL_LoadBMP("./img/block_red.bmp");
+        SDL_SetWindowIcon(window, ico);
+        SDL_FreeSurface(ico);
         
         keyfunc = 0,keyfuncup = 0,mousemove = 0,mousedown = 0,onevent = 0,exitok = 1;
         is_fullscreen = (int)fullscreen;
@@ -117,100 +98,113 @@ public:
     
     void clear()
     {
-        SDL_Rect rect = {0, 0, pscr->w, pscr->h};
+        SDL_Rect rect = {0, 0, (Uint16)pscr->w, (Uint16)pscr->h};
         SDL_FillRect(pscr, &rect, 0);
+    }
+    
+    static mxHwnd *mxhwnd_static;
+    
+    static void eventProc() {
+        mxhwnd_static->loop();
+    }
+
+    void flip() {
+	SDL_Surface *front = SDL_GetWindowSurface(window);
+ 	SDL_BlitScaled(pscr, NULL, front, NULL);
+	SDL_UpdateWindowSurface(window);
+    }    
+
+    SDL_Event event;
+    
+    void loop() {
+        
+        
+        
+        if(scr != 5)
+            clear();
+        
+        renderscr(scr);
+        
+        while(SDL_PollEvent(&event))
+        {
+            switch( event.type )
+            {
+                case SDL_QUIT:
+                    printf("Quit called!\n");
+                    exitok = 0;
+                    return;
+                    break;
+                case SDL_JOYBUTTONDOWN:
+                {
+                    
+                    
+                    switch(event.jbutton.button)
+                    {
+                        case 11:
+                            keyfunc(13);
+                            break;
+                        case 3:
+                            keyfunc(27);
+                            break;
+                        case 8:
+                            keyfunc(273);
+                            break;
+                        case 9:// right
+                            keyfunc(275);
+                            break;
+                        case 6:// down
+                            keyfunc(274);
+                            break;
+                        case 7://left
+                            keyfunc(276);
+                            break;
+                        case 0:
+                            keyfunc('a');
+                            break;
+                        case 1:
+                            keyfunc('s');
+                            break;
+                    }
+                    
+                }
+                    break;
+                case SDL_KEYDOWN:
+                    if(keyfunc != 0)
+                    {
+                        keyfunc(event.key.keysym.sym);
+                    }
+                    break;
+                case SDL_KEYUP:
+                    if(keyfuncup != 0)
+                    {
+                        keyfuncup(event.key.keysym.sym);
+                    }
+                    break;
+                case SDL_MOUSEMOTION:
+                    if(mousemove != 0)
+                        mousemove(event.motion.x,event.motion.y);
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                    if(mousedown != 0)
+                        mousedown(event.button.button,event.button.x,event.button.y);
+                    break;
+            }
+            if(onevent != 0)
+                onevent(&event);
+        }
     }
     
     int initLoop(void (*rendery)(int screen))
     {
         renderscr = rendery;
-        SDL_Event event;
-        
+#ifndef __EMSCRIPTEN__
         while(exitok == 1)
         {
-            
-            
-            
-            if(scr != 5)
-                clear();
-            
-            renderscr(scr);
-            
-            
-            
-            
-            
-            
-            
-            while(SDL_PollEvent(&event))
-            {
-                switch( event.type )
-                {
-                    case SDL_QUIT:
-                        printf("Quit called!\n");
-                        exitok = 0;
-                        return 0;
-                        break;
-                    case SDL_JOYBUTTONDOWN:
-                    {
-                        
-                        
-                        switch(event.jbutton.button)
-                        {
-                            case 11:
-                                keyfunc(13);
-                                break;
-                            case 3:
-                                keyfunc(27);
-                                break;
-                            case 8:
-                                keyfunc(273);
-                                break;
-                            case 9:// right
-                                keyfunc(275);
-                                break;
-                            case 6:// down
-                                keyfunc(274);
-                                break;
-                            case 7://left
-                                keyfunc(276);
-                                break;
-                            case 0:
-                                keyfunc('a');
-                                break;
-                            case 1:
-                                keyfunc('s');
-                                break;
-                        }
-                        
-                    }
-                        break;
-                    case SDL_KEYDOWN:
-                        if(keyfunc != 0)
-                        {
-                            keyfunc(event.key.keysym.sym);
-                        }
-                        break;
-                    case SDL_KEYUP:
-                        if(keyfuncup != 0)
-                        {
-                            keyfuncup(event.key.keysym.sym);
-                        }
-                        break;
-                    case SDL_MOUSEMOTION:
-                        if(mousemove != 0)
-                            mousemove(event.motion.x,event.motion.y);
-                        break;
-                    case SDL_MOUSEBUTTONDOWN:
-                        if(mousedown != 0)
-                            mousedown(event.button.button,event.button.x,event.button.y);
-                        break;
-                }
-                if(onevent != 0)
-                    onevent(&event);
-            }
+            loop();
         }
-        
+#else
+        emscripten_set_main_loop(mxHwnd::eventProc, 0, 1);
+#endif
         return 1;
     }
     
@@ -377,7 +371,7 @@ public:
             case 2:
                 return *((Uint16 *)Surface->pixels + Y * Surface->pitch/2 + X);
                 break;
-            case 3: { // Format/endian independent 
+            case 3: { // Format/endian independent
                 Uint8 r, g, b;
                 r = *((bits)+Surface->format->Rshift/8);
                 g = *((bits)+Surface->format->Gshift/8);
@@ -433,10 +427,10 @@ public:
         sptr = SDL_LoadBMP(str);
         if(sptr == 0)
         {
-            fprintf(stderr, "Unable to load bitmap..%s\n",str);
+            fprintf(stderr, "Unable to load bitmap..  %s\n",str);
             return false;
         }
-        else 
+        else
             return true;
     }
     
@@ -448,7 +442,7 @@ public:
             fprintf(stderr, "Unable to load bitmap ..%s", str);
             return false;
         }
-        SDL_SetColorKey(sptr , SDL_SRCCOLORKEY,SDL_MapRGB(sptr->format, r,g,b));
+        SDL_SetColorKey(sptr , SDL_TRUE, SDL_MapRGB(sptr->format, r,g,b));
         
         return true;
     }
@@ -486,7 +480,6 @@ public:
 };
 
 
-// Wrapper around SFont
 class mxFont : public mxObject {
 public:
     SDL_Font* Font;
@@ -494,8 +487,7 @@ public:
     
     mxFont()
     {
-        Font = 0;
-        color = 0xFF;
+        Font = 0;;
     }
     
     ~mxFont()
@@ -507,6 +499,7 @@ public:
     void load(mxHwnd *mx, const char *sfont)
     {
         this->mx = mx;
+	color = SDL_MapRGBA(this->mx->pscr->format, 255,255,255,255);
         Font = SDL_InitFont(sfont);
         if(!Font)
         {
@@ -522,12 +515,13 @@ public:
     
 };
 
+
 class mxPaint : public mxObject {
     
 public:
     void drawRect(int x, int y, int x2, int y2, Uint32 color)
     {
-        SDL_Rect rect = {x, y, x2, y2};
+        SDL_Rect rect = {(Sint16)x, (Sint16)y, (Uint16)x2, (Uint16)y2};
         SDL_FillRect(mx->pscr, &rect, color);
     }
 };

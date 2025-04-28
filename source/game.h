@@ -420,7 +420,8 @@ public:
 							draweffect(i,j);
 							draweffect(i,j+1);
 							draweffect(i,j+2);
-							SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+							//SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+						        mxhwnd.flip();
 						}
 						return;
 					}
@@ -451,7 +452,7 @@ public:
 							draweffect(q,z);
 							draweffect(q+1,z);
 							draweffect(q+2,z);
-							SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+							mxhwnd.flip();
 						}
 						return;
 					}
@@ -482,7 +483,7 @@ public:
 							draweffect(w,p);
 							draweffect(w+1,p+1);
 							draweffect(w+2,p+2);
-							SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+							mxhwnd.flip();
 						}
 					}
 					if( w-2 >= 0 && p-2 >= 0)
@@ -500,7 +501,7 @@ public:
 								draweffect(w,p);
 								draweffect(w-1,p-1);
 								draweffect(w-2,p-2);
-								SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+								mxhwnd.flip();
 							}
 						}
 
@@ -521,7 +522,7 @@ public:
 								draweffect(w,p);
 								draweffect(w-1,p+1);
 								draweffect(w-2,p+2);
-								SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+								mxhwnd.flip();
 							}
 						}
 
@@ -542,7 +543,7 @@ public:
 								draweffect(w,p);
 								draweffect(w+1,p-1);
 								draweffect(w+2,p-2);
-								SDL_UpdateRect(mxhwnd.pscr,0,0,640,480);
+								mxhwnd.flip();
 							}
 						}
 
@@ -642,18 +643,18 @@ public:
 
 		}
 		
-		Uint8 *keybuffer = SDL_GetKeyState(0);
+		const Uint8 *keybuffer = SDL_GetKeyboardState(0);
 		
 		static int wait = 0;
 		
 		if((++wait % 4) == 0) {
 		
 		
-			if(keybuffer[SDLK_LEFT]) bdown(276);
-			if(keybuffer[SDLK_RIGHT]) bdown(275);
-			if(keybuffer[SDLK_DOWN]) bdown(274);
-			if(keybuffer[SDLK_q]) bdown('a');
-			if(keybuffer[SDLK_s]) bdown('s');
+			if(keybuffer[SDL_SCANCODE_LEFT]) bdown(276);
+			if(keybuffer[SDL_SCANCODE_RIGHT]) bdown(275);
+			if(keybuffer[SDL_SCANCODE_DOWN]) bdown(274);
+			if(keybuffer[SDL_SCANCODE_Q]) bdown('a');
+			if(keybuffer[SDL_SCANCODE_S]) bdown('s');
 		
 		}
 

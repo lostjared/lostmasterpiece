@@ -1,7 +1,7 @@
 OBJ=$(patsubst %.cpp,%.o,$(wildcard *.cpp))
 
-CFLAGS= -std=c++98 `sdl-config --cflags`
-LDFLAGS= `sdl-config --libs`
+CFLAGS= -std=c++98 `sdl2-config --cflags`
+LDFLAGS= `sdl2-config --libs`
 PROGRAM=lostmasterpiece
 
 %.o: %.cpp
