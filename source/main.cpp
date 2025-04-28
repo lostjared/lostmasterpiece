@@ -12,11 +12,11 @@
 #include<unistd.h>
 
 mxHwnd mxhwnd;
+mxHwnd *mxHwnd::mxhwnd_static = &mxhwnd;
 mxFont  font;
 mxPaint paint;
 SDL_Joystick *stick;
 char stemp[280];
-
 void load(int scr);
 void unload();
 
