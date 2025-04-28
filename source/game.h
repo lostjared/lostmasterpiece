@@ -340,9 +340,9 @@ public:
 		drawmatrix();
 		drawblock();
 		char temp[255];
-		sprintf(temp, "Score: %i", (unsigned int)matrix.Game.score);
+		snprintf(temp,255, "Score: %i", (unsigned int)matrix.Game.score);
 		font.printText(200,60,temp);
-		sprintf(temp, "Tabs: %d", matrix.Game.lines);
+		snprintf(temp,255,"Tabs: %d", matrix.Game.lines);
 		font.printText(310,60,temp);
 		j_in();
 	}

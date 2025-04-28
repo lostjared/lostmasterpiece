@@ -24,7 +24,9 @@ int linenum = 10;
 
 const char *getPath(const char *str)
 {
-return str;
+    static char buffer[1024 * 4];
+    snprintf(buffer, (1024 * 4),"./img/%s", str);
+    return buffer;
 }
 
 
@@ -101,9 +103,9 @@ public:
 	{
 		paint.drawRect(35,82,621-35,440-70, 0x0);
 		char chr[255];
-		sprintf(chr, "Amount of Lines Until Speed increase: %d", lines);
+		snprintf(chr,254, "Amount of Lines Until Speed increase: %d", lines);
 		font.printText(70,90,chr);
-		sprintf(chr, "Toggle FullScreen : %s", full_scr == 0 ? "On" : "Off");
+		snprintf(chr,254, "Toggle FullScreen : %s", full_scr == 0 ? "On" : "Off");
 		font.printText(70,120,chr);
 		switch(cur_pos)
 		{
@@ -204,7 +206,7 @@ public:
 		font.printText(45,90, "High Scores");
 		for(int p = 0; p < 8; p++)
 		{
-			sprintf(dat,"%d) %s: %d", (p+1), score.data[p].user_name, score.data[p].score);
+			snprintf(dat,1024,"%d) %s: %d", (p+1), score.data[p].user_name, score.data[p].score);
 			font.printText(45,start_y,dat);
 			start_y += 20;
 		}
@@ -212,7 +214,7 @@ public:
 		if(in_score == true)
 		{
 			char dat[255];
-			sprintf(dat,"%s%s", user_name, rand()%5 > 3 ? "_" : "");
+			snprintf(dat,255, "%s%s", user_name, rand()%5 > 3 ? "_" : "");
 			font.printText(280,120,"Input Name: ");
 			font.printText(420,120,dat);
 		}
