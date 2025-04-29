@@ -1,4 +1,4 @@
-
+fffffffffffffffffffffffffffffffffffffffff
 ![Screenshot 2025-04-28 041240](https://github.com/user-attachments/assets/73040f43-9079-41b3-ba84-defbde0ceb5b)
 
 ![Screenshot 2025-04-28 041252](https://github.com/user-attachments/assets/7e5df494-dee6-4295-b101-8f658ea14edf)
@@ -17,21 +17,8 @@ Originally developed years ago, this project reflects my early coding endeavors.
 Included in this project are three makefiles tailored for different environments:
 
 * For *nix systems
-* For Windows 32-bit
-* For PlayStation Portable (PSP)
+* For Windows 
 * Compilation examples:
 
-For *nix: 
-  
-    make -f Makefile
-    
-For Windows: 
-
-    make -f Makefile.win
-
-For PSP: 
-
-    make -f Makefile.psp
-    
 Please ensure to clean the directory prior to building for a different platform.
-Dependencies: This project requires SDL 1.2.
+Dependencies: This project requires SDL2
