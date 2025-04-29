@@ -20,4 +20,15 @@ Included in this project are three makefiles tailored for different environments
 * For Windows
 * 
 
+To build
+```bash
+cd source
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+cp LostMasterPiece ../
+cd ..
+./LostMasterPiece
+````
+
 Dependencies: This project requires SDL2
