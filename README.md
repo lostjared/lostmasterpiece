@@ -17,8 +17,7 @@ Originally developed years ago, this project reflects my early coding endeavors.
 Included in this project are three makefiles tailored for different environments:
 
 * For *nix systems
-* For Windows 
-* Compilation examples:
+* For Windows
+* 
 
-Please ensure to clean the directory prior to building for a different platform.
 Dependencies: This project requires SDL2
