@@ -4,8 +4,8 @@
 #include"game.h"
 
 #ifdef FOR_PSP
-#include <pspkerneltypes.h>	//# |_ For 333Mhz Overclock
-#include <psppower.h>		//# |
+#include <pspkerneltypes.h>	
+#include <psppower.h>		
 #endif
 
 #include<string>
@@ -44,22 +44,15 @@ public:
 		logo.load(getPath("intro.bmp"));
 		start_scr.load(getPath("start.bmp"));
 		tha_time = time(0);
-		//clock_pos = SDL_GetTicks();
 	}
 	void update()
 	{
-		//static unsigned int tick_count = SDL_GetTicks();
-		//if(tick_count + 1000 > SDL_GetTicks())
-		//{
 
 			logo.display(&mxhwnd,0,0);
-		//	return;
-		//}
-		// screen transition
 		for(int i = 0; i < 20000 ; i++)
 		{
 			int pos1=rand()%logo.sptr->w, pos2 = rand()%logo.sptr->h;
-			mxhwnd.setPixel(logo.sptr, pos1, pos2 , mxhwnd.getPixel(start_scr.sptr,pos1,pos2));//rand()%255,rand()%255,rand()%255);
+			mxhwnd.setPixel(logo.sptr, pos1, pos2 , mxhwnd.getPixel(start_scr.sptr,pos1,pos2));
 		}
 
 		logo.display(&mxhwnd, 0, 0);
@@ -173,29 +166,12 @@ public:
 
 	void init()
 	{
-		/*ifstream fin("scores.dat", ios::binary);
-		if(fin.is_open())
-		{
-			fin.read((char*)&score,sizeof(score));
-			fin.close();
-		}
-		else
-		{
-			for(int v = 0; v <= 7; v++)
-			{
-				score.data[v].score = 0;
-				strcpy(score.data[v].user_name,"Unknown User");
-			}
-			save();
-		}*/
+		
 	}
 
 	void save()
 	{
-		/*
-		ofstream fout("scores.dat", ios::binary);
-		fout.write((char*)&score,sizeof(score));
-		fout.close();*/
+		
 	}
 
 	void update()
@@ -365,43 +341,66 @@ Start pstart;
 Intro intro;
 Game  game;
 
+#include <cstdio>    
 
 void mousemove(int x, int y)
 {
-	// printf("mouse moved to %i %i\n", x , y);
+    printf("mouse: %3d, %3d\n", x, y);
 
-	switch(mxhwnd.getScreen())
-	{
-	case START:
-		if(x > 250 && x < 500 && y > 170 && y < 235)
-		{
-			pstart.cursor_pos = 0;
-		}
+    if (mxhwnd.getScreen() != START) {
+        return;
+    }
 
-		if(x > 250 && x < 618 && y > 265 && y < 320)
-		{
-			pstart.cursor_pos = 1;
-		}
+    int w = mxhwnd.pscr->w;
+    int h = mxhwnd.pscr->h;
 
-		if(x > 250 && x < 580 && y > 326 && y < 380)
-		{
-			pstart.cursor_pos = 2;
-		}
-
-		if(x > 250 && x < 580 && y > 394 && y < 440)
-		{
-			pstart.cursor_pos = 3;
-		}
+    float sx = float(w) / 640.0f;
+    float sy = float(h) / 480.0f;
 
 
-		break;
-	}
+    int x0 = int(360 * sx);
+    int x1 = int(600 * sx);
 
+    {
+        int y0 = int(180 * sy);
+        int y1 = int(240 * sy);
+        if (y >= y0 && y <= y1) {
+            pstart.cursor_pos = 0;
+            return;
+        }
+    }
+
+    {
+        int y0 = int(260 * sy);
+        int y1 = int(320 * sy);
+        if (y >= y0 && y <= y1) {
+            pstart.cursor_pos = 1;
+            return;
+        }
+    }
+
+    {
+        int y0 = int(340 * sy);
+        int y1 = int(400 * sy);
+        if (y >= y0 && y <= y1) {
+            pstart.cursor_pos = 2;
+            return;
+        }
+    }
+
+    {
+        int y0 = int(420 * sy);
+        int y1 = int(480 * sy);
+        if (y >= y0 && y <= y1) {
+            pstart.cursor_pos = 3;
+            return;
+        }
+    }
 }
+
 
 void mousedown(int button, int x, int y)
 {
-	//printf("mouse pressed button %i at pos %i %i\n", button, x ,y);
 	switch(mxhwnd.getScreen())
 	{
 	case INTRO:
@@ -517,14 +516,13 @@ void keydown(int key)
 				if(pstart.options.lines > 5)
 					pstart.options.lines--;
 				break;
-			case 1:// no need for fullscreen
+			case 1:
 				break;
 			}
 			break;
 		case SDLK_RETURN:
 			linenum = pstart.options.lines;
 			unload();
-			//if(mxhwnd.isFullScreen() != pstart.options.full_scr)
 			mxhwnd.setfullscreen(pstart.options.full_scr,"MpSDL", 640,480, 32);
 			load(START);
 			break;
@@ -551,21 +549,17 @@ void keydown(int key)
 		}
 		break;
 	}
-	//printf("pressed the %i scr := %d\n ", key, mxhwnd.getScreen());
 }
 
 void keyup(int key)
 {
-	//printf("KeyUP : %i\n", key);
 }
 
 void onevent(SDL_Event *e)
 {
-	//printf("event #%d\n", e->type);
 	switch(e->type)
 	{
 	case SDL_KEYDOWN:
-		//printf("%d \n",SDL_KEYDOWN);
 		break;
 	}
 }
@@ -581,12 +575,12 @@ void render(int screen)
 		pstart.update();
 		break;
 	case OPTIONS:
-		pstart.update(); // options is inside of start
+		pstart.update(); 
 	case CREDITS:
-		pstart.update(); // credits is inside of start
+		pstart.update(); 
 		break;
 	case HIGHSCORES:
-		pstart.update(); // highscores is inside of start
+		pstart.update(); 
 		break;
 	case GAME:
 		{
@@ -617,8 +611,8 @@ void load(int scr)
 
 void unload()
 {
-	font.~mxFont(); // 
-	pstart.free(); //  
+	font.~mxFont(); 
+	pstart.free(); 
 	intro.free();
 	game.free();
 }
@@ -626,20 +620,10 @@ void unload()
 int main(int argc, char **argv)
 {
 #ifdef FOR_PSP
-	scePowerSetClockFrequency(333, 333, 166); //# overclocked
+	scePowerSetClockFrequency(333, 333, 166); 
 #endif
 	
-	// below is only nessicary if create a OS X bundle
-	/*
-	if(argv[0][0] == '/')
-	{
-		
-		std::string path = argv[0];
-		std::string p = path.substr(0, path.rfind("/"));
-		p += "/../Resources";
-		chdir(p.c_str());
-	}
-	*/
+	
 	
 	
 	if( SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) < 0 )
@@ -670,4 +654,3 @@ void gameover()
 		pstart.scorez.input_score(game.matrix.Game.score);
 	}
 }
-
