@@ -2,12 +2,10 @@
 #include"compile_mode.h"
 #include"theheader.h"
 #include"game.h"
-
 #ifdef FOR_PSP
 #include <pspkerneltypes.h>	
 #include <psppower.h>		
 #endif
-
 #include<string>
 #include<unistd.h>
 
@@ -341,11 +339,10 @@ Start pstart;
 Intro intro;
 Game  game;
 
-#include <cstdio>    
 
 void mousemove(int x, int y)
 {
-    printf("mouse: %3d, %3d\n", x, y);
+
 
     if (mxhwnd.getScreen() != START) {
         return;
