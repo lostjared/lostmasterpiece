@@ -1,11 +1,8 @@
+![image](https://github.com/user-attachments/assets/507a0640-4aec-431b-ba1b-293b9430f26f)
 
-![Screenshot 2025-04-28 041240](https://github.com/user-attachments/assets/73040f43-9079-41b3-ba84-defbde0ceb5b)
+![image](https://github.com/user-attachments/assets/ec04aec9-9061-422b-9561-47508e499f15)
 
-![Screenshot 2025-04-28 041252](https://github.com/user-attachments/assets/7e5df494-dee6-4295-b101-8f658ea14edf)
-
-![Screenshot 2025-04-28 041310](https://github.com/user-attachments/assets/957b577d-d696-402e-8aa7-8190f07e0fed)
-
-![Screenshot 2025-04-28 041344](https://github.com/user-attachments/assets/bbb36eed-feae-4960-810c-034b2a159e6f)
+![image](https://github.com/user-attachments/assets/88891462-2f05-44a3-993f-9b8b9b66d8e1)
 
 
 This project presents an enhanced iteration of MasterPiece, incorporating visual elements to enrich the gameplay experience.
